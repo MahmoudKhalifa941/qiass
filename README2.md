@@ -479,10 +479,10 @@
 
 | **Phase** | **Timeline** | **Features** |
 |-----------|--------------|--------------|
-| **Phase 1** | Q2 2024 | AI Enhancement, Predictive Analytics |
-| **Phase 2** | Q3 2024 | AR/VR Integration, Advanced Mobile |
-| **Phase 3** | Q4 2024 | Blockchain, Smart Contracts |
-| **Phase 4** | Q1 2025 | Advanced Analytics, ML Insights |
+| **Phase 1** | Q2 2025 | AI Enhancement, Predictive Analytics |
+| **Phase 2** | Q3 2025 | AR/VR Integration, Advanced Mobile |
+| **Phase 3** | Q4 2026| Blockchain, Smart Contracts |
+| **Phase 4** | Q5 2026 | Advanced Analytics, ML Insights |
 
 ---
 
