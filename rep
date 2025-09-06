@@ -1,0 +1,104 @@
+# Backend API Status Report (qiass)
+
+Date: 2025-09-06
+
+## Executive Summary
+The repository is now backend-only. API routes are organized by domain under `routes/api`, with corresponding tests under `tests/API`. CI runs API tests only. Swagger (L5) is present for API docs. No frontend build assets remain. A local boot attempt failed due to `php` not on PATH; environment setup is required to run locally.
+
+Overall progress: ~78% across core domains. Most features have routes, controllers, and tests. Gaps are mainly around environment setup, export pipeline standardization, and a few advanced flows.
+
+## Priority Areas (Next 1–2 Sprints)
+- Fix local/dev environment bootstrap (PHP runtime, .env, DB, queues)
+- Run full API test suite and stabilize flaky/slow tests
+- Harden security (rate limits, auth guards, CORS/Sanctum trim)
+- Unify export/download flows (streaming, ACL, retention)
+- Expand/verify Swagger docs coverage for public/universal endpoints
+
+## Critical Dependencies / Blockers
+- PHP CLI not available in shell (cannot start server)
+- Database/cache/queue services must be provisioned and configured
+- Any external providers (mail, storage, AI) need valid credentials
+- CORS and auth middleware alignment for API-only mode
+- Storage symlink and private/public buckets for exports/uploads
+
+---
+
+## Authentication & Security
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| 2FA & Sessions | Login with optional 2FA | 85% | E2E flows | Add test matrix, recovery codes | 1w |
+| API Keys | Key-based auth for services | 80% | Rotation policy | Add revoke/rotate endpoints | 1w |
+| Sanctum/JWT | Token auth for clients | 80% | Final guard trim | Remove SPA guards, doc flows | 1w |
+| Rate Limiting | Abuse protection | 60% | Rules per group | Implement/verify per-route limits | 1–2w |
+
+## Users & Permissions
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| User CRUD | Manage user profiles | 85% | Edge cases | Add soft-delete/restore | 1w |
+| Roles | Role management | 80% | Bulk ops | APIs for bulk assign | 1w |
+| Permissions | Fine-grained access | 75% | Audit logs | Add grants audit trail | 1–2w |
+| 2FA Recovery | Account recovery | 70% | UX guidance | Add admin-assisted reset | 1w |
+
+## Admin & Superadmin
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| Admin Dashboard | Ops endpoints | 75% | KPIs | Add metrics endpoints | 1–2w |
+| Tenant/Schools | Multi-tenant mgmt | 75% | Quotas | Enforce limits & reports | 2w |
+| DB Utilities | Backups/migrations | 70% | Safety rails | Confirm locks & retention | 1–2w |
+| Translations | i18n resources | 70% | Coverage | Add import/export tools | 1–2w |
+
+## Academic & Learning
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| Courses/Lessons | Curriculum APIs | 80% | Versioning | Add draft/publish flow | 1–2w |
+| Exams/Quizzes | Assessment APIs | 75% | Item banks | Randomization & proctoring | 2w |
+| Grades/Reports | Academic records | 75% | Export unification | Standard CSV/JSON & ACL | 1–2w |
+| Learning Materials | Content catalog | 70% | Metadata | Indexing, search facets | 2w |
+
+## AI Services
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| AI Assistant | QA, tutoring | 70% | Prompt safety | Add guardrails & logs | 1–2w |
+| Analytics Aid | Insights via AI | 65% | KPIs map | Define metrics catalog | 2w |
+| Content Gen | Items/explanations | 65% | Review loop | Human-in-the-loop review | 2w |
+| Model Config | Provider settings | 70% | Secrets mgmt | Env templating, fallbacks | 1w |
+
+## Interactive Systems
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| Cognitive Gym | Skills drills | 70% | Difficulty curve | Calibrate & test seeds | 2w |
+| Global Challenges | Team/arena play | 65% | Anti-abuse | Matchmaking & limits | 2w |
+| Achievements | Badges & points | 70% | Edge cases | Backfill & recount jobs | 1–2w |
+| Leaderboards | Rankings | 65% | Ties & decay | Windowed ranks, pruning | 2w |
+
+## Analytics & Reporting
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| Usage Analytics | API usage stats | 70% | Dimensionality | Add filters & cohorts | 1–2w |
+| Academic Reports | Grades/attendance | 70% | Export unify | Streamed exports & ACL | 1–2w |
+| Admin KPIs | Ops dashboards | 65% | Alerts | Threshold-based alerts | 2w |
+| Export Pipeline | Files downloads | 60% | Standardization | Centralize, retention, S3 | 2–3w |
+
+## Communication & Support
+| Name | Description | % | Missing | Pending Tasks | Timeline |
+|---|---|---:|---|---|---|
+| Notifications | System notices | 75% | Digesting | Add daily/weekly digests | 1w |
+| Invitations | Events/teams invites | 70% | Abuse checks | Verify quotas/rate limits | 1w |
+| Support Center | FAQs/tickets | 70% | SLAs | Auto-routing & priorities | 2w |
+| Email/SMS | Outbound channels | 70% | Provider fallback | Retry & fallback paths | 1–2w |
+
+---
+
+## Evidence & Notes
+- Routes are organized by domain under `routes/api/*`; web routes redirect to API docs (API-only mode).
+- Tests exist across Functional, Advanced, Security, and Performance under `tests/API/*`.
+- CI workflow runs API tests; no frontend build/test steps remain.
+- `resources/` contains only vendor docs views; no SPA assets.
+- Local dev failed due to missing `php` in PATH; ensure PHP and database are configured.
+
+## Appendix: How to Validate Locally (next steps)
+1) Ensure PHP 8.x, Composer, and a DB (MySQL/PostgreSQL) are installed.
+2) Copy `.env.example` to `.env` and set DB/queue/cache/storage creds.
+3) composer install; php artisan key:generate; php artisan migrate --seed.
+4) Run tests: `vendor/bin/phpunit`.
+5) Serve: `php artisan serve --port=8001` (after fixing PATH).
